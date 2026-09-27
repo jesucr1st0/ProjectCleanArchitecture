@@ -6,8 +6,7 @@ import sqlite3
 """Para generar codigos aleatorios"""
 import uuid
 
-from aplicacion.Registros import RegistrarPrestamo
-from aplicacion.Registros import RegistrarDevolucion
+from aplicacion.Registros import Registros
 from aplicacion.puertos.NotificarEstudiante import NotificarEstudiante
 from aplicacion.puertos.ObtenerFecha import ObtenerFecha
 from aplicacion.puertos.RepositorioEquipo import RepositorioEquipo
@@ -32,22 +31,11 @@ conexion.execute(
 )
 
 """Realizar pedido recibe la conexion a la db y la pasarela de pagos, y se encarga de ejecutar el caso de uso."""
-registrarPrestamo = RegistrarPrestamo(
+casoUso1 = Registros(
     repoEquipo= RepositorioEquipoSQLite(conexion),
     repoEstudiante= RepositorioEstudianteSQLite(conexion),
     repoPrestamo= RepositorioPrestamoSQLite(conexion),
     notificador= Notificador(),
     obtenerFecha= ProveedorFecha(),
-    prestamo = Prestamo()
-)
-registrarDevolucion = RegistrarDevolucion(
-    repoEquipo= RepositorioEquipoSQLite(conexion),
-    repoEstudiante= RepositorioEstudianteSQLite(conexion),
-    repoPrestamo= RepositorioPrestamoSQLite(conexion),
-    notificador= Notificador(),
-    obtenerFecha= ProveedorFecha()
 )
 
-registrarDaño = registrarDaño(
-    repoEquipo= RepositorioEquipoSQLite(conexion),
-    )

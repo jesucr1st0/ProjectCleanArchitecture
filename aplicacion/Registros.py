@@ -8,33 +8,33 @@ from puertos import RepositorioEstudiante
 
 class Registros:
     
-    def __init__(self, repoEquipo: RepositorioEquipo, repoEstudiante: RepositorioEstudiante, repoPrestamo: RepositorioPrestamo, notificador: NotificarEstudiante, obtenerFecha: ObtenerFecha, prestamo: Prestamo):
+    def __init__(self, repoEquipo: RepositorioEquipo, repoEstudiante: RepositorioEstudiante, repoPrestamo: RepositorioPrestamo, notificador: NotificarEstudiante, obtenerFecha: ObtenerFecha):
         self.repoEquipo = repoEquipo
         self.repoEstudiante = repoEstudiante
         self.repoPrestamo = repoPrestamo
         self.notificador = notificador
         self.obtenerFecha = obtenerFecha
-        self.prestamo = prestamo
+        
         
 
-    def registrarPrestamo(self):
-        equipo = self.prestamo.obtener_equipo_prestamo()
-        estudiante = self.prestamo.obtener_estudiante_prestamo()
+    def registrarPrestamo(self, prestamo: Prestamo):
+        equipo = prestamo.obtener_equipo_prestamo()
+        estudiante = prestamo.obtener_estudiante_prestamo()
         
-        if self.validarPrestamo():
+        if self.validarPrestamo(prestamo):
             equipo_actualizado = equipo.actualizar_estado("PRESTADO")
             self.repoEquipo.actualizarEquipo(equipo_actualizado)
             
             estudiante_actualizado = estudiante.actualizar_cantidad_prestamos(estudiante.cantidad_prestamos() + 1)
             self.repoEstudiante.actualizarEstudiante(estudiante_actualizado)
             
-            self.repoPrestamo.guardarPrestamo(self.prestamo)
+            self.repoPrestamo.guardarPrestamo(prestamo)
             self.notificador.notificarPrestamo(estudiante)
 
             
-    def validarPrestamo(self):
-        estudiante = self.prestamo.obtener_estudiante_prestamo()
-        equipo = self.prestamo.obtener_equipo_prestamo()
+    def validarPrestamo(self, prestamo: Prestamo):
+        estudiante = prestamo.obtener_estudiante_prestamo()
+        equipo = prestamo.obtener_equipo_prestamo()
         bd_estudiante = self.repoEstudiante.consultarEstudiante(estudiante.obtener_cedula())
         bd_equipo = self.repoEquipo.consultarEquipo(equipo.obtener_id_equipo())
         
@@ -51,11 +51,11 @@ class Registros:
             return True
         
         
-    def registrarDevolucion(self):
-        fecha_actual = self.obtenerFecha.obtenerFecha()
-        fecha_limite = self.prestamo.obtener_fecha_limite()
-        estudiante = self.prestamo.obtener_estudiante_prestamo()
-        equipo = self.prestamo.obtener_equipo_prestamo()
+    def registrarDevolucion(self, obtenerFecha: ObtenerFecha, prestamo: Prestamo):
+        fecha_actual = obtenerFecha.obtenerFecha()
+        fecha_limite = prestamo.obtener_fecha_limite()
+        estudiante = prestamo.obtener_estudiante_prestamo()
+        equipo = prestamo.obtener_equipo_prestamo()
         
         
         if fecha_actual > fecha_limite:
@@ -72,8 +72,8 @@ class Registros:
             RepositorioEstudiante.actualizarEstudiante(estudiante_actualizado)
             
 
-    def registrarDaño(self):
-        equipo = self.prestamo.obtener_equipo_prestamo()
+    def registrarDaño(self, prestamo: Prestamo):
+        equipo = prestamo.obtener_equipo_prestamo()
         
         equipo_actualizado = equipo.actualizar_estado("EN_MANTENIMIENTO")
         self.repoEquipo.actualizarEquipo(equipo_actualizado)
