@@ -1,8 +1,5 @@
 from abc import ABC, abstractmethod
-
 from dominio.Estudiante import Estudiante
-
-
 
 class NotificarEstudiante(ABC):
     @abstractmethod
