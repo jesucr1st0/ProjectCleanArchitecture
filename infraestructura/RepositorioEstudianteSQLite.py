@@ -1,5 +1,6 @@
 
 from aplicacion.puertos.RepositorioEstudiante import RepositorioEstudiante
+from dominio.Estudiante import Estudiante
 
 
 
@@ -12,16 +13,15 @@ class RepositorioSQLite(RepositorioEstudiante):
                         (estudiante.obtener_id(), estudiante.obtener_nombre(), estudiante.obtener_correo(), estudiante.obtener_carrera()))
         self.db.commit()
 
-    def consultarEstudiante(self, IdEstudiante, estudiante):
-        cursor = self.db.execute("SELECT * FROM estudiantes WHERE idEstudiante = ?", (IdEstudiante,))
+    def consultarEstudiante(self, cedula):
+        cursor = self.db.execute("SELECT * FROM estudiantes WHERE cedula = ?", (cedula,))
         row = cursor.fetchone()
         if row:
-            estudiante.cedula = row[0]
-            estudiante.nombre = row[1]
-            estudiante.cantidadPrestamos = row[2]
-            estudiante.multa = row[3]
-        return estudiante
-    def actualizarEstudiante(self, IdEstudiante, estudiante):
-        self.db.execute("UPDATE estudiantes SET nombre = ?, cantidadPrestamos = ?, multa = ? WHERE idEstudiante = ?",
-                        (estudiante.obtener_nombre(), estudiante.cantidad_prestamos(), estudiante.tiene_multa(), IdEstudiante))
-        self.db.commit()
+            estudiante = Estudiante(row[0], row[1], row[2], row[3])
+            return estudiante
+        return None
+    
+    def actualizarEstudiante(self, estudiante):
+        self.db.execute("UPDATE estudiantes SET nombre = ?, correo = ?, carrera = ? WHERE cedula = ?",
+                        (estudiante.obtener_nombre(), estudiante.obtener_correo(), estudiante.obtener_carrera(), estudiante.obtener_id()))
+        self.db.commit()    
