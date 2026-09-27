@@ -1,5 +1,5 @@
-from dataclasses import dataclass, field
-import datetime
+from dataclasses import dataclass
+from datetime import datetime, timedelta
 
 from dominio.Equipo import Equipo
 from dominio.Estudiante import Estudiante
@@ -12,9 +12,22 @@ class Prestamo:
     equipo: Equipo
     estudiante: Estudiante
     fechaLimite: datetime
-
-    def equpo_prestamo(self) -> Equipo:
+            
+    
+    #Getters
+    
+    def obtener_id_prestamo(self) -> str:
+        return self.idPrestamo
+    
+    def obtener_fecha_prestamo(self) -> datetime:
+        return self.fechaPrestamo
+    
+    def obtener_equipo_prestamo(self) -> Equipo:
         return self.equipo
-
-    def estudiante_prestamo(self) -> Estudiante:
+    
+    def obtener_estudiante_prestamo(self) -> Estudiante:
         return self.estudiante
+    
+    def obtener_fecha_limite(self) -> datetime: 
+        return self.fechaLimite + timedelta(days=self.equipo.obtener_categoria().obtener_plazo())
+
