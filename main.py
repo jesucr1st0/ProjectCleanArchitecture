@@ -5,8 +5,6 @@ Uso:  python main.py
 import sqlite3
 """Para generar codigos aleatorios"""
 import uuid
-"""gestionar decimales --> Para representar dinero con exactitud."""
-from decimal import Decimal
 
 from aplicacion.Registros import RegistrarPrestamo
 from aplicacion.Registros import RegistrarDevolucion
@@ -29,16 +27,27 @@ from infraestructura.Notificador import Notificador
 conexion = sqlite3.connect("PrestacionEquipos.db")
 conexion.execute(
     "CREATE TABLE IF NOT EXISTS equipos (idEquipo TEXT PRIMARY KEY, estado TEXT, categoria TEXT)",
-    "CREATE TABLE IF NOT EXISTS estudiantes (cedula TEXT PRIMARY KEY, nombre TEXT, correo TEXT, carrera TEXT)",
-    "CREATE TABLE IF NOT EXISTS prestamos (idPrestamo TEXT PRIMARY KEY, fechaPrestamo TEXT, idEquipo TEXT, idEstudiante TEXT, fechaLimite TEXT)"
+    "CREATE TABLE IF NOT EXISTS estudiantes (cedula TEXT PRIMARY KEY, nombre TEXT, cantidadPrestamos INTEGER, multa BOOLEAN)",
+    "CREATE TABLE IF NOT EXISTS prestamos (idPrestamo TEXT PRIMARY KEY, fechaPrestamo Date, idEquipo TEXT, idEstudiante TEXT, fechaLimite DATE)"
 )
 
-"""Realizar pedido resibe la conexion a la db y la pasarela de pagos, y se encarga de ejecutar el caso de uso."""
-caso_usoP = RegistrarPrestamo(
-    """repo=RepositorioSQLite(conexion),
-    pagos=PasarelaSimulada(),"""
+"""Realizar pedido recibe la conexion a la db y la pasarela de pagos, y se encarga de ejecutar el caso de uso."""
+registrarPrestamo = RegistrarPrestamo(
+    repoEquipo= RepositorioEquipoSQLite(conexion),
+    repoEstudiante= RepositorioEstudianteSQLite(conexion),
+    repoPrestamo= RepositorioPrestamoSQLite(conexion),
+    notificador= Notificador(),
+    obtenerFecha= ProveedorFecha(),
+    prestamo = Prestamo()
 )
-caso_usoD = RegistrarDevolucion(
-    """repo=RepositorioSQLite(conexion),
-    pagos=PasarelaSimulada(),"""
+registrarDevolucion = RegistrarDevolucion(
+    repoEquipo= RepositorioEquipoSQLite(conexion),
+    repoEstudiante= RepositorioEstudianteSQLite(conexion),
+    repoPrestamo= RepositorioPrestamoSQLite(conexion),
+    notificador= Notificador(),
+    obtenerFecha= ProveedorFecha()
 )
+
+registrarDaño = registrarDaño(
+    repoEquipo= RepositorioEquipoSQLite(conexion),
+    )
