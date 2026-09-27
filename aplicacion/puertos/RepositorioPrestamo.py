@@ -2,7 +2,9 @@ from abc import ABC, abstractmethod
 from dominio.Prestamo import Prestamo
 
 class RepositorioPrestamo(ABC):
+    
     @abstractmethod
+
     def consultarPrestamo(self, IdPrestamo: str) -> Prestamo: ...
 
     @abstractmethod
