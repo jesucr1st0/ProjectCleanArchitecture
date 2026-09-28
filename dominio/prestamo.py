@@ -29,5 +29,5 @@ class Prestamo:
         return self.estudiante
     
     def obtener_fecha_limite(self) -> datetime: 
-        return self.fechaLimite + timedelta(days=self.equipo.obtener_categoria().obtener_plazo())
+        return self.fechaLimite + timedelta(days=int(self.equipo.obtener_categoria().obtener_plazo()))
 

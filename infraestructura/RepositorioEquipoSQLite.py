@@ -1,6 +1,7 @@
 
 from aplicacion.puertos.RepositorioEquipo import RepositorioEquipo
 from dominio.Equipo import Equipo
+from dominio.interfaces.portatil import Portatil
 
 
 
@@ -10,18 +11,26 @@ class RepositorioSQLite(RepositorioEquipo):
 
     def guardarEquipo(self, equipo):
         self.db.execute("INSERT INTO equipos VALUES (?, ?, ?, ?)",
-                        (equipo.obtener_id(), equipo.obtener_nombre(), equipo.obtener_descripcion(), equipo.obtener_disponible()))
+                        (equipo.obtener_id_equipo(), equipo.obtener_estado(), equipo.obtener_categoria(),))
         self.db.commit()
 
     def consultarEquipo(self, IdEquipo):
         cursor = self.db.execute("SELECT * FROM equipos WHERE idEquipo = ?", (IdEquipo,))
         row = cursor.fetchone()
         if row:
-            equipo = Equipo(row[0], row[1], row[2], row[3])
+            equipo = Equipo(row[0], row[1], row[2])
             return equipo
+        print("NO SE ENCONTRÓ EL EQUIPO")
         return None
-    
+        
     def actualizarEquipo(self, equipo):
-        self.db.execute("UPDATE equipos SET nombre = ?, descripcion = ?, disponible = ? WHERE idEquipo = ?",
-                        (equipo.obtener_nombre(), equipo.obtener_descripcion(), equipo.obtener_disponible(), equipo.obtener_id()))
-        self.db.commit()
+      self.db.execute(
+        "UPDATE equipos SET estado = ?, categoria = ? WHERE idEquipo = ?",
+        (
+            equipo.obtener_estado(),
+            equipo.obtener_categoria().obtener_nombre(),
+            equipo.obtener_id_equipo()
+        )
+    )
+
+      self.db.commit()

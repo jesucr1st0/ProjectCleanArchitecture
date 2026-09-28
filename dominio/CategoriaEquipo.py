@@ -18,5 +18,9 @@ class CategoriaEquipo(ABC):
     @abstractmethod
     def obtener_tarifa_diaria(self) -> int:
         raise NotImplementedError
+
+    @abstractmethod
+    def obtener_nombre(self) -> str:
+        raise NotImplementedError
         
     

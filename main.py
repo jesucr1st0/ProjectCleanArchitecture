@@ -2,6 +2,7 @@
 
 Uso:  python main.py
 """
+from datetime import datetime
 import sqlite3
 """Para generar codigos aleatorios"""
 import uuid
@@ -9,14 +10,10 @@ import uuid
 from aplicacion.Registros import Registros
 from aplicacion.puertos.NotificarEstudiante import NotificarEstudiante
 from aplicacion.puertos.ObtenerFecha import ObtenerFecha
-from aplicacion.puertos.RepositorioEquipo import RepositorioEquipo
-from aplicacion.puertos.RepositorioEstudiante import RepositorioEstudiante
-from aplicacion.puertos.RepositorioPrestamo import RepositorioPrestamo
-from dominio.CategoriaEquipo import CategoriaEquipo
+from dominio.interfaces.portatil import Portatil
 from dominio.Equipo import Equipo
 from dominio.Estudiante import Estudiante
 from dominio.Prestamo import Prestamo
-from dominio.ServicioMultas import ServicioMultas
 from infraestructura.ProveedorFecha import ProveedorFecha
 from infraestructura.RepositorioEquipoSQLite import RepositorioSQLite as RepositorioEquipoSQLite
 from infraestructura.RepositorioEstudianteSQLite import RepositorioSQLite as RepositorioEstudianteSQLite
@@ -25,17 +22,50 @@ from infraestructura.Notificador import Notificador
 
 conexion = sqlite3.connect("PrestacionEquipos.db")
 conexion.execute(
-    "CREATE TABLE IF NOT EXISTS equipos (idEquipo TEXT PRIMARY KEY, estado TEXT, categoria TEXT)",
-    "CREATE TABLE IF NOT EXISTS estudiantes (cedula TEXT PRIMARY KEY, nombre TEXT, cantidadPrestamos INTEGER, multa BOOLEAN)",
-    "CREATE TABLE IF NOT EXISTS prestamos (idPrestamo TEXT PRIMARY KEY, fechaPrestamo Date, idEquipo TEXT, idEstudiante TEXT, fechaLimite DATE)"
+    "CREATE TABLE IF NOT EXISTS equipos (idEquipo TEXT PRIMARY KEY, estado TEXT, categoria TEXT)"
 )
 
-"""Realizar pedido recibe la conexion a la db y la pasarela de pagos, y se encarga de ejecutar el caso de uso."""
+conexion.execute(
+    "CREATE TABLE IF NOT EXISTS estudiantes (cedula TEXT PRIMARY KEY, nombre TEXT, cantidadPrestamos INTEGER, multa BOOLEAN)"
+)
+
+conexion.execute(
+    "CREATE TABLE IF NOT EXISTS prestamos (idPrestamo TEXT PRIMARY KEY, fechaPrestamo DATE, idEquipo TEXT, idEstudiante TEXT, fechaLimite DATE)"
+)
+
 casoUso1 = Registros(
     repoEquipo= RepositorioEquipoSQLite(conexion),
     repoEstudiante= RepositorioEstudianteSQLite(conexion),
     repoPrestamo= RepositorioPrestamoSQLite(conexion),
     notificador= Notificador(),
-    obtenerFecha= ProveedorFecha(),
 )
+categoria = Portatil()
+
+equipo = Equipo(
+    "EQ001",
+    "Disponible",
+    categoria,
+    # los demás atributos que tenga tu clase
+)
+
+estudiante = Estudiante(
+    "1001",
+    "Juan Pérez",
+    0,
+    False
+)
+
+prestamo = Prestamo(
+    str(uuid.uuid4())[:8],
+    datetime(2025, 10, 1),
+    equipo,
+    estudiante,
+    datetime(2025, 10, 15)
+)
+
+resultadoPrestamo = casoUso1.registrarPrestamo(prestamo)
+resultadoDevolucion = casoUso1.registrarDevolucion(ProveedorFecha(), prestamo)
+resultadoDaño = casoUso1.registrarDaño(prestamo)
+
+
 

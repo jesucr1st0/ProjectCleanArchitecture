@@ -3,10 +3,10 @@ from dataclasses import dataclass
 
 
 @dataclass
-class Camara(CategoriaEquipo):
-    plazo: 1
-    tarifaDiaria: 12000
-    
+class KitRobotica(CategoriaEquipo):
+    plazo: int = 1
+    tarifaDiaria: int = 12000
+
     #getters
     
     def obtener_plazo(self) -> int:
@@ -14,3 +14,6 @@ class Camara(CategoriaEquipo):
     
     def obtener_tarifa_diaria(self) -> int:
         return self.tarifaDiaria
+    
+    def obtener_nombre(self) -> str:
+            return "Kit de Robótica"

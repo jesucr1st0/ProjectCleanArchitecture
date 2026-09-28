@@ -10,7 +10,7 @@ class Equipo:
     
     #Getters
     def obtener_id_equipo(self)-> str:
-        return self. idEquipo
+        return self.idEquipo
     
     def obtener_estado(self)-> str:
         return self.estado
