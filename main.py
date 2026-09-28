@@ -8,8 +8,6 @@ import sqlite3
 import uuid
 
 from aplicacion.Registros import Registros
-from aplicacion.puertos.NotificarEstudiante import NotificarEstudiante
-from aplicacion.puertos.ObtenerFecha import ObtenerFecha
 from dominio.interfaces.portatil import Portatil
 from dominio.Equipo import Equipo
 from dominio.Estudiante import Estudiante
