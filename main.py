@@ -39,33 +39,44 @@ casoUso1 = Registros(
     repoPrestamo= RepositorioPrestamoSQLite(conexion),
     notificador= Notificador(),
 )
+
 categoria = Portatil()
 
 equipo = Equipo(
-    "EQ001",
-    "Disponible",
-    categoria,
-    # los demás atributos que tenga tu clase
+    "EQ989",
+    "disponible",
+    categoria
 )
 
+# repositorioEquipo = RepositorioEquipoSQLite(conexion)
+# repositorioEquipo.guardarEquipo(equipo)
+
 estudiante = Estudiante(
-    "1001",
-    "Juan Pérez",
+    "0001",
+    "Jesus",
     0,
     False
 )
 
+# repositorioEstudiante = RepositorioEstudianteSQLite(conexion)
+# repositorioEstudiante.guardarEstudiante(estudiante)
+
 prestamo = Prestamo(
-    str(uuid.uuid4())[:8],
-    datetime(2025, 10, 1),
+    str(uuid.uuid4())[:8], #Generar ID aleatorio de 8 caracteres
+    datetime(2026, 9, 20),
     equipo,
     estudiante,
-    datetime(2025, 10, 15)
+    datetime(2026, 9, 20)
 )
 
-resultadoPrestamo = casoUso1.registrarPrestamo(prestamo)
-resultadoDevolucion = casoUso1.registrarDevolucion(ProveedorFecha(), prestamo)
+# resultadoPrestamo = casoUso1.registrarPrestamo(prestamo)
+# resultadoDevolucion = casoUso1.registrarDevolucion(ProveedorFecha(), prestamo)
 resultadoDaño = casoUso1.registrarDaño(prestamo)
+
+
+
+
+
 
 
 

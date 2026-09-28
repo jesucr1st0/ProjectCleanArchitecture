@@ -3,6 +3,9 @@ from dominio.Equipo import Equipo
 
 
 class RepositorioEquipo(ABC):
+    
+    @abstractmethod
+    def guardarEquipo(self, equipo: Equipo) -> None: ...
 
     @abstractmethod
     def consultarEquipo(self, IdEquipo: str) -> Equipo: ...

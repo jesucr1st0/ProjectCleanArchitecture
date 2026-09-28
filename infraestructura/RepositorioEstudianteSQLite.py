@@ -10,7 +10,7 @@ class RepositorioSQLite(RepositorioEstudiante):
 
     def guardarEstudiante(self, estudiante):
         self.db.execute("INSERT INTO estudiantes VALUES (?, ?, ?, ?)",
-                        (estudiante.obtener_id(), estudiante.obtener_nombre(), estudiante.obtener_correo(), estudiante.obtener_carrera()))
+                        (estudiante.obtener_cedula(), estudiante.obtener_nombre(), estudiante.cantidad_prestamos(), estudiante.tiene_multa()))
         self.db.commit()
 
     def consultarEstudiante(self, cedula):
@@ -22,6 +22,6 @@ class RepositorioSQLite(RepositorioEstudiante):
         return None
     
     def actualizarEstudiante(self, estudiante):
-        self.db.execute("UPDATE estudiantes SET nombre = ?, correo = ?, carrera = ? WHERE cedula = ?",
-                        (estudiante.obtener_nombre(), estudiante.obtener_correo(), estudiante.obtener_carrera(), estudiante.obtener_id()))
+        self.db.execute("UPDATE estudiantes SET nombre = ?, cantidadPrestamos = ?, multa = ? WHERE cedula = ?",
+                        (estudiante.obtener_nombre(), estudiante.cantidad_prestamos(), estudiante.tiene_multa(), estudiante.obtener_cedula()))
         self.db.commit()    

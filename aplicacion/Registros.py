@@ -28,26 +28,28 @@ class Registros:
             self.repoEstudiante.actualizarEstudiante(estudiante)
             
             self.repoPrestamo.guardarPrestamo(prestamo)
-            self.notificador.notificarPrestamo(estudiante)
+            mensaje = self.notificador.notificarPrestamo(estudiante)
+            print(mensaje)
 
             
     def validarPrestamo(self, prestamo: Prestamo):
         estudiante = prestamo.obtener_estudiante_prestamo()
         equipo = prestamo.obtener_equipo_prestamo()
-        bd_estudiante = self.repoEstudiante.consultarEstudiante(estudiante.obtener_cedula())
-        bd_equipo = self.repoEquipo.consultarEquipo(equipo.obtener_id_equipo())
+        self.repoEstudiante.consultarEstudiante(estudiante.obtener_cedula())
+        self.repoEquipo.consultarEquipo(equipo.obtener_id_equipo())
         
-        if bd_estudiante.tiene_multa() == True:  #Arreglar esto
-                Exception("El estudiante tiene una multa pendiente, no puede realizar prestamos.")
+        if estudiante.tiene_multa() == True:  
+                raise Exception("El estudiante tiene una multa pendiente, no puede realizar prestamos.")
         
-        if bd_estudiante.cantidad_prestamos() > 2:    #Arreglar esto
-                Exception("El estudiante ha llegado al limite de prestamos.")
+        if estudiante.cantidad_prestamos() >= 2:    
+                raise Exception("El estudiante ha llegado al limite de prestamos.")
                 
-        if bd_equipo.obtener_estado().upper() != "DISPONIBLE":  #Arreglar esto
-                Exception("El equipo no se encuentra disponible para prestamo.")
+        if equipo.obtener_estado().upper() != "DISPONIBLE": 
+                raise Exception("El equipo no se encuentra disponible para prestamo.")
                 
         else:
             return True
+        
         
     
     def registrarDevolucion(self, obtenerFecha: ObtenerFecha, prestamo: Prestamo):
@@ -66,7 +68,8 @@ class Registros:
             servicio_multas = ServicioMultas(tarifa)
 
             multa = servicio_multas.calcular_multa(dias)
-            self.notificador.notificarMulta(estudiante, multa)
+            mensaje = self.notificador.notificarMulta(estudiante, multa)
+            print(mensaje)
             
         else:
             equipo.actualizar_estado("DISPONIBLE")
@@ -81,6 +84,8 @@ class Registros:
         
         equipo.actualizar_estado("EN_MANTENIMIENTO")
         self.repoEquipo.actualizarEquipo(equipo)
+        print(f"Se registro el daño en el equipo {equipo.obtener_id_equipo()}, su estado cambió a {equipo.obtener_estado()}")
+        
         
     
 

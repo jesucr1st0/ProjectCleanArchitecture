@@ -10,8 +10,8 @@ class RepositorioSQLite(RepositorioEquipo):
         self.db = conexion
 
     def guardarEquipo(self, equipo):
-        self.db.execute("INSERT INTO equipos VALUES (?, ?, ?, ?)",
-                        (equipo.obtener_id_equipo(), equipo.obtener_estado(), equipo.obtener_categoria(),))
+        self.db.execute("INSERT INTO equipos VALUES (?, ?, ?)",
+                        (equipo.obtener_id_equipo(), equipo.obtener_estado(), equipo.obtener_categoria().obtener_nombre()))
         self.db.commit()
 
     def consultarEquipo(self, IdEquipo):
