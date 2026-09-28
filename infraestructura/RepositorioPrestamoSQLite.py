@@ -11,7 +11,7 @@ class RepositorioSQLite(RepositorioPrestamo):
 
     def guardarPrestamo(self, prestamo):
         self.db.execute("INSERT INTO prestamos VALUES (?, ?, ?, ?, ?)",
-                        (prestamo.obtener_id_prestamo(), str(prestamo.obtener_fecha_prestamo()), prestamo.obtener_equipo_prestamo().obtener_id(), prestamo.obtener_estudiante_prestamo().obtener_id(), str(prestamo.obtener_fecha_limite())))
+                        (prestamo.obtener_id_prestamo(), str(prestamo.obtener_fecha_prestamo()), prestamo.obtener_equipo_prestamo().obtener_id_equipo(), prestamo.obtener_estudiante_prestamo().obtener_cedula(), str(prestamo.obtener_fecha_limite())))
         self.db.commit()
     def consultarPrestamo(self, IdPrestamo):
         cursor = self.db.execute("SELECT * FROM prestamos WHERE idPrestamo = ?", (IdPrestamo,))
@@ -24,7 +24,7 @@ class RepositorioSQLite(RepositorioPrestamo):
         return None
     def actualizarPrestamo(self, IdPrestamo, prestamo):
         self.db.execute("UPDATE prestamos SET fechaPrestamo = ?, idEquipo = ?, idEstudiante = ?, fechaLimite = ? WHERE idPrestamo = ?",
-                        (str(prestamo.obtener_fecha_prestamo()), prestamo.obtener_equipo_prestamo().obtener_id(), prestamo.obtener_estudiante_prestamo().obtener_id(), str(prestamo.obtener_fecha_limite()), IdPrestamo))
+                        (str(prestamo.obtener_fecha_prestamo()), prestamo.obtener_equipo_prestamo().obtener_id_equipo(), prestamo.obtener_estudiante_prestamo().obtener_cedula(), str(prestamo.obtener_fecha_limite()), prestamo.obtener_id_prestamo()))
         self.db.commit()
 
     
