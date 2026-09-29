@@ -17,7 +17,7 @@ from infraestructura.RepositorioEquipoSQLite import RepositorioSQLite as Reposit
 from infraestructura.RepositorioEstudianteSQLite import RepositorioSQLite as RepositorioEstudianteSQLite
 from infraestructura.RepositorioPrestamoSQLite import RepositorioSQLite as RepositorioPrestamoSQLite
 from infraestructura.Notificador import Notificador
-from aplicacion.puertos.ValidadorPrestamo import ValidadorPrestamo
+from aplicacion.ValidadorPrestamo import ValidadorPrestamo
 
 conexion = sqlite3.connect("PrestacionEquipos.db")
 conexion.execute(

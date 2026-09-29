@@ -5,7 +5,7 @@ from dominio.ServicioMultas import ServicioMultas
 from aplicacion.puertos.ObtenerFecha import ObtenerFecha
 from aplicacion.puertos.RepositorioEquipo import RepositorioEquipo
 from aplicacion.puertos.RepositorioEstudiante import RepositorioEstudiante
-from aplicacion.puertos.ValidadorPrestamo import ValidadorPrestamo
+from aplicacion.ValidadorPrestamo import ValidadorPrestamo
 
 class Registros:
     
