@@ -19,6 +19,7 @@ from infraestructura.RepositorioEquipoSQLite import RepositorioSQLite as Reposit
 from infraestructura.RepositorioEstudianteSQLite import RepositorioSQLite as RepositorioEstudianteSQLite
 from infraestructura.RepositorioPrestamoSQLite import RepositorioSQLite as RepositorioPrestamoSQLite
 from infraestructura.Notificador import Notificador
+from aplicacion.puertos.ValidadorPrestamo import ValidadorPrestamo
 
 conexion = sqlite3.connect("PrestacionEquipos.db")
 conexion.execute(
@@ -37,7 +38,7 @@ casoUso1 = Registros(
     repoEquipo= RepositorioEquipoSQLite(conexion),
     repoEstudiante= RepositorioEstudianteSQLite(conexion),
     repoPrestamo= RepositorioPrestamoSQLite(conexion),
-    notificador= Notificador(),
+    notificador= Notificador()
 )
 
 categoria = Portatil()
@@ -69,9 +70,9 @@ prestamo = Prestamo(
     datetime(2026, 9, 20)
 )
 
-# resultadoPrestamo = casoUso1.registrarPrestamo(prestamo)
+resultadoPrestamo = casoUso1.registrarPrestamo(prestamo)
 # resultadoDevolucion = casoUso1.registrarDevolucion(ProveedorFecha(), prestamo)
-resultadoDaño = casoUso1.registrarDaño(prestamo)
+# resultadoDaño = casoUso1.registrarDaño(prestamo)
 
 
 

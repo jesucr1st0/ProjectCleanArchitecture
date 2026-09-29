@@ -5,6 +5,7 @@ from dominio.ServicioMultas import ServicioMultas
 from aplicacion.puertos.ObtenerFecha import ObtenerFecha
 from aplicacion.puertos.RepositorioEquipo import RepositorioEquipo
 from aplicacion.puertos.RepositorioEstudiante import RepositorioEstudiante
+from aplicacion.puertos.ValidadorPrestamo import ValidadorPrestamo
 
 class Registros:
     
@@ -14,13 +15,12 @@ class Registros:
         self.repoPrestamo = repoPrestamo
         self.notificador = notificador
         
-        
 
     def registrarPrestamo(self, prestamo: Prestamo):
         equipo = prestamo.obtener_equipo_prestamo()
         estudiante = prestamo.obtener_estudiante_prestamo()
         
-        if self.validarPrestamo(prestamo):
+        if ValidadorPrestamo.validarPrestamo(prestamo, self.repoEstudiante, self.repoEquipo):
             equipo.actualizar_estado("PRESTADO")
             self.repoEquipo.actualizarEquipo(equipo)
             
@@ -30,26 +30,6 @@ class Registros:
             self.repoPrestamo.guardarPrestamo(prestamo)
             mensaje = self.notificador.notificarPrestamo(estudiante)
             print(mensaje)
-
-            
-    def validarPrestamo(self, prestamo: Prestamo):
-        estudiante = prestamo.obtener_estudiante_prestamo()
-        equipo = prestamo.obtener_equipo_prestamo()
-        self.repoEstudiante.consultarEstudiante(estudiante.obtener_cedula())
-        self.repoEquipo.consultarEquipo(equipo.obtener_id_equipo())
-        
-        if estudiante.tiene_multa() == True:  
-                raise Exception("El estudiante tiene una multa pendiente, no puede realizar prestamos.")
-        
-        if estudiante.cantidad_prestamos() >= 2:    
-                raise Exception("El estudiante ha llegado al limite de prestamos.")
-                
-        if equipo.obtener_estado().upper() != "DISPONIBLE": 
-                raise Exception("El equipo no se encuentra disponible para prestamo.")
-                
-        else:
-            return True
-        
         
     
     def registrarDevolucion(self, obtenerFecha: ObtenerFecha, prestamo: Prestamo):
